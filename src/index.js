@@ -11,7 +11,7 @@ module.exports = class W5MFTypesRemotePlugin {
     const ARCHIVE_FILE = this.options?.archiveFile || 'w5mf-types.tar';
     const REMOTES = this.options?.remotes || {};
 
-    compiler.hooks.beforeCompile.tap("W5MFTypesRemote", async (compilation) => {
+    compiler.hooks.afterEnvironment.tap("W5MFTypesRemote", async (compilation) => {
       const remotes = Object.values(REMOTES);
       for (let i in remotes) {
         const remote = remotes[i].split('@')[1].split('/');
