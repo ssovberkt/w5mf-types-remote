@@ -7,8 +7,8 @@ module.exports = class W5MFTypesRemotePlugin {
   }
 
   apply(compiler) {
-    const INSTALL_DIR = this.options?.installDir || 'node_modules';
-    const ARCHIVE_FILE = this.options?.archiveFile || '@types.tar';
+    const INSTALL_DIR = this.options?.installDir || '.';
+    const ARCHIVE_FILE = this.options?.archiveFile || 'w5mf-types.tar';
     const REMOTES = this.options?.remotes || {};
 
     compiler.hooks.beforeCompile.tap("W5MFTypesRemote", async (compilation) => {
