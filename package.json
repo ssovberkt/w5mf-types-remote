@@ -1,0 +1,22 @@
+{
+  "name": "w5mf-types-remote",
+  "version": "0.1.0",
+  "description": "For Webpack Module Federation Plugins: Working typescript: Remote types",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ssovberkt/w5mf-types-remote"
+  },
+  "scripts": {},
+  "keywords": [
+    "wmf",
+    "ts",
+    "types"
+  ],
+  "author": "ssovberkt",
+  "license": "MIT",
+  "dependencies": {
+    "download": "8.0.0",
+    "tar": "6.1.11"
+  }
+}
