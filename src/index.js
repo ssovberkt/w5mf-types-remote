@@ -39,7 +39,7 @@ const run = async (remote) => {
   const module = parseRemoteUrl(remote);
 
   try {
-    const response = await axios.get(`${module.url}/${TYPES_FILE}?${Math.floor(Date.now())}`, {
+    const response = await axios.get(`${module.url}/${TYPES_FILE}?v=${Math.floor(Date.now())}`, {
       responseType: 'blob',
       httpsAgent: new https.Agent({ rejectUnauthorized: false }),
     });
