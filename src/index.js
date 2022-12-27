@@ -2,11 +2,11 @@ const argv = require('yargs/yargs')(process.argv.slice(2)).argv;
 require('dotenv').config();
 
 if (!argv?.NODE_ENV) {
-  throw new Error('Set NODE_ENV params (development or production)');
+  throw new Error('[W5MF-TYPES-REMOTE] Set NODE_ENV params (development or production)');
 }
 
 if (!['development', 'production'].includes(argv.NODE_ENV)) {
-  throw new Error(`Set NODE_ENV params (development or production). Current: ${argv.NODE_ENV}`);
+  throw new Error(`[W5MF-TYPES-REMOTE] Set NODE_ENV params (development or production). Current: ${argv.NODE_ENV}`);
 }
 
 process.env.NODE_ENV = argv.NODE_ENV
@@ -17,6 +17,7 @@ const path = require('path');
 const tar = require('tar');
 const axios = require('axios');
 const https = require('https');
+const { v4: uuidv4 } = require('uuid');
 
 const ROOT_DIR = process.cwd();
 
@@ -39,7 +40,7 @@ const run = async (remote) => {
   const module = parseRemoteUrl(remote);
 
   try {
-    const response = await axios.get(`${module.url}/${TYPES_FILE}?v=${Math.floor(Date.now())}`, {
+    const response = await axios.get(`${module.url}/${TYPES_FILE}?v=${uuidv4()}`, {
       responseType: 'blob',
       httpsAgent: new https.Agent({ rejectUnauthorized: false }),
     });
@@ -47,16 +48,16 @@ const run = async (remote) => {
     fs.writeFile(UPLOAD_TYPES_FILE, response.data, (error) => {
       if (error) {
         console.log(error);
-        throw new Error(`[REMOTE_TYPES] Write file error`);
+        throw new Error(`[W5MF-TYPES-REMOTE] Write file error`);
       }
 
       tar.extract({ file: UPLOAD_TYPES_FILE, cwd: INSTALL_DIR }, () => {
-        rimraf(UPLOAD_TYPES_FILE, () => console.log(`[REMOTE_TYPES] Remove '${INSTALL_FILE}' for '${module.url}'`));
+        rimraf(UPLOAD_TYPES_FILE, () => console.log(`[W5MF-TYPES-REMOTE] Remove '${INSTALL_FILE}' for '${module.url}'`));
       });
     });
 
   } catch (error) {
-    console.log('[REMOTE_TYPES]', error);
+    console.log('[W5MF-TYPES-REMOTE]', error);
     throw error;
   }
 }
@@ -64,13 +65,13 @@ const run = async (remote) => {
 (() => {
   rimraf(INSTALL_DIR, async (error) => {
     if (error) {
-      console.log(`[REMOTE_TYPES] Remove '${INSTALL_DIR}'`, error);
+      console.log(`[W5MF-TYPES-REMOTE] Remove '${INSTALL_DIR}'`, error);
     }
 
     fs.mkdir(INSTALL_DIR, async (error) => {
       if (error) {
         console.log(error);
-        throw new Error(`[REMOTE_TYPES] Mkdir '${INSTALL_DIR}' error`);
+        throw new Error(`[W5MF-TYPES-REMOTE] Mkdir '${INSTALL_DIR}' error`);
       }
 
       const remotes = Object.values(REMOTES);
