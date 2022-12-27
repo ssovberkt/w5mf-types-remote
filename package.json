@@ -1,6 +1,6 @@
 {
   "name": "w5mf-types-remote",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "For node: Working typescript: Remote types",
   "main": "src/index.js",
   "repository": {
