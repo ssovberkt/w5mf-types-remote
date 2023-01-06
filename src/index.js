@@ -26,7 +26,6 @@ const config = require(path.resolve(ROOT_DIR, 'src/config'));
 const INSTALL_DIR = path.resolve(ROOT_DIR, '@types');
 const TYPES_FILE = 'w5mf-types.tar';
 const UPLOAD_TYPES_FILE = path.resolve(ROOT_DIR, `${INSTALL_DIR}/${TYPES_FILE}`);
-const INSTALL_FILE = path.resolve(ROOT_DIR, TYPES_FILE);
 const REMOTES = config.remotes || {};
 
 const parseRemoteUrl = (remoteUrl) => {
@@ -45,14 +44,16 @@ const run = async (remote) => {
       httpsAgent: new https.Agent({ rejectUnauthorized: false }),
     });
 
-    fs.writeFile(UPLOAD_TYPES_FILE, response.data, (error) => {
+    const typesFileName = `${UPLOAD_TYPES_FILE}.${module.name}.tar`;
+
+    fs.writeFile(typesFileName, response.data, (error) => {
       if (error) {
         console.log(error);
         throw new Error(`[W5MF-TYPES-REMOTE] Write file error`);
       }
 
-      tar.extract({ file: UPLOAD_TYPES_FILE, cwd: INSTALL_DIR }, () => {
-        rimraf(UPLOAD_TYPES_FILE, () => console.log(`[W5MF-TYPES-REMOTE] Remove '${INSTALL_FILE}' for '${module.url}'`));
+      tar.extract({ file: typesFileName, cwd: INSTALL_DIR }, () => {
+        rimraf(typesFileName, () => console.log(`[W5MF-TYPES-REMOTE] Remove '${typesFileName}' for '${module.url}'`));
       });
     });
 
@@ -74,9 +75,8 @@ const run = async (remote) => {
         throw new Error(`[W5MF-TYPES-REMOTE] Mkdir '${INSTALL_DIR}' error`);
       }
 
-      const remotes = Object.values(REMOTES);
-      for (let i in remotes) {
-        await run(remotes[i]);
+      for (let remote of Object.values(REMOTES)) {
+        await run(remote);
       }
     });
   });
